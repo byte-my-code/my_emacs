@@ -68,3 +68,17 @@
 	(text (buffer-substring start end)))
     (delete-region start end)
     (insert (decode-coding-string (string-make-unibyte text) coding-system))))
+
+
+;; Z80 Mode - use the .z80 file extension
+(load "~/.emacs.d/z80-mode.el")
+
+;; Backup files
+(setq
+ backup-by-copying t     ; dont clobber symlinks
+ backup-directory-alist
+ '(("." . "~/.saves/"))  ; dont litter filesystem
+ delete-old-versions t
+ kept-new-versions 6
+ ketp-old-versions 2
+ version-control t)      ; use versioned backups
