@@ -40,10 +40,12 @@
 ;; disable word wrap
 (set-default 'truncate-lines t)
 
+;; Highlight current line
+(global-hl-line-mode 1)
 
 ;; Font
-(add-to-list 'default-frame-alist '(font . "DejaVu Sans Mono-12" ))
-(set-face-attribute 'default t :font "DejaVu Sans Mono-12" )
+(add-to-list 'default-frame-alist '(font . "Fira Code-12" ))
+(set-face-attribute 'default t :font "Fira Code-12" )
 
 ;; Modeline
 (use-package all-the-icons
@@ -60,20 +62,40 @@
   (setq neo-theme (if(display-graphic-p) 'icons 'arrow)))
 
 
-(defun recode-region (start end &optional coding-system)
-  "Replace the region with a recoded text."
-  (interactive "r\n\zCoding System (utf-8): ")
-  (setq coding-system (or coding-system 'utf-8))
-  (let ((buffer-read-only nil)
-	(text (buffer-substring start end)))
-    (delete-region start end)
-    (insert (decode-coding-string (string-make-unibyte text) coding-system))))
+;; Indentation
+(setq-default indent-tabs-mode nil) ; Use spaces NOT tabs
+(setq tab-width 4)
 
-
+;; --------------------------
+;; ----- LANGUAGE MODES -----
+;; --------------------------
 ;; Z80 Mode - use the .z80 file extension
 (load "~/.emacs.d/z80-mode.el")
 
-;; Backup files
+;; Web Dev
+(use-package web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+
+;; Markdown
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . markdown-mode)
+  :init (setq markdown-command "multimarkdown"))
+
+
+
+
+
+
+
+;; ---------------------------
+;; ----- BACKUP SETTINGS -----
+;; ---------------------------
 (setq
  backup-by-copying t     ; dont clobber symlinks
  backup-directory-alist
