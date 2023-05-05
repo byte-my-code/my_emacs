@@ -48,11 +48,19 @@
 (set-face-attribute 'default t :font "Fira Code-12" )
 
 ;; Modeline
-(use-package all-the-icons
-  :ensure t)
+;;(use-package all-the-icons
+;;  :ensure t)
 (use-package doom-modeline
   :ensure t
   :init(doom-modeline-mode 1))
+
+(use-package nerd-icons
+  ;; :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+  )
 
 ;; Neotree file browser
 (use-package neotree
@@ -73,23 +81,55 @@
 (load "~/.emacs.d/z80-mode.el")
 
 ;; Web Dev
-(use-package web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+;;(use-package web-mode)
+;;(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+;;(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
 
 ;; Markdown
-(use-package markdown-mode
-  :ensure t
-  :mode ("\\.md\\'" . markdown-mode)
-  :init (setq markdown-command "multimarkdown"))
+;;(use-package markdown-mode
+;;  :ensure t
+;;  :mode ("\\.md\\'" . markdown-mode)
+;;  :init (setq markdown-command "multimarkdown"))
 
 
+;; Which key
+(use-package which-key
+  :init
+  (which-key-mode t))
+
+;; LSP Mode
+(setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp
+                                           projectile hydra flycheck
+                                           company avy which-key helm-xref
+                                           dap-mode yasnippet-snippets))
+(when (cl-find-if-not #'package-installed-p package-selected-packages)
+  (package-refresh-contents)
+  (mapc #'package-install package-selected-packages))
+
+;; Sample Helm
+(helm-mode)
+(require 'helm-xref)
+(define-key global-map [remap find-file] #'helm-find-files)
+(define-key global-map [remap execute-extended-command] #'helm-M-x)
+(define-key global-map [remap switch-to-buffer] #'helm-mini)
+
+(which-key-mode)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
 
 
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      lsp-idle-delay 0.1) ;; clangd is fast
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools)
+  (yas-global-mode))
 
 
 
