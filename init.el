@@ -78,7 +78,7 @@
 ;; ----- LANGUAGE MODES -----
 ;; --------------------------
 ;; Z80 Mode - use the .z80 file extension
-(load "~/.emacs.d/z80-mode.el")
+(load "~/.config/emacs/z80-mode.el")
 
 ;; Web Dev
 ;;(use-package web-mode)
